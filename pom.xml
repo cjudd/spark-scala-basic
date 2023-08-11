@@ -1,17 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.example</groupId>
+
+  <groupId>net.javajudd</groupId>
   <artifactId>spark-scala-basic</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
   <name>${project.artifactId}</name>
-  <description>My wonderfull scala app</description>
+  <description>Basic Spark/Scala Project</description>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.12.6</scala.version>
-    <scala.compat.version>2.12</scala.compat.version>
+    <scala.compat.version>2.11</scala.compat.version>
+    <scala.version>${scala.compat.version}.12</scala.version>
+    <spark.version>2.4.0</spark.version>
     <spec2.version>4.2.0</spec2.version>
   </properties>
 
@@ -20,6 +24,18 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_${scala.compat.version}</artifactId>
+      <version>${spark.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.compat.version}</artifactId>
+      <version>${spark.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Test -->
