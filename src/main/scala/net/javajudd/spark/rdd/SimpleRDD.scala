@@ -6,7 +6,6 @@ object SimpleRDD {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
       .appName("SimpleRDD")
-      .master("local")
       .getOrCreate()
 
     val data = Seq(("Java", 20000), ("Python", 100000), ("Scala", 3000))
@@ -16,6 +15,14 @@ object SimpleRDD {
     rdd.foreach(println)
 
     println(s"count: ${rdd.count()}")
+
+    val sortedRdd = rdd.sortByKey(numPartitions = 1)
+    //val sortedRdd = rdd.sortByKey().collect() // should not be used with large result sets
+    println("Sorted:")
+    sortedRdd.foreach(println)
+
+    val groupByRdd = rdd.groupBy(_._2)
+    groupByRdd.foreach(println)
 
     rdd.saveAsTextFile("/tmp/languages")
   }
