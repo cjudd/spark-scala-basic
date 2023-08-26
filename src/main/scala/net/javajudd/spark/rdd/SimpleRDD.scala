@@ -16,14 +16,15 @@ object SimpleRDD {
 
     println(s"count: ${rdd.count()}")
 
-    val sortedRdd = rdd.sortByKey(numPartitions = 1)
+    val sortedRdd = rdd.sortByKey()
     //val sortedRdd = rdd.sortByKey().collect() // should not be used with large result sets
+    //val sortedRdd = rdd.sortByKey(numPartitions = 1)
     println("Sorted:")
     sortedRdd.foreach(println)
 
     val groupByRdd = rdd.groupBy(_._2)
     groupByRdd.foreach(println)
 
-    rdd.saveAsTextFile("/tmp/languages")
+    sortedRdd.saveAsTextFile("/tmp/languages")
   }
 }
