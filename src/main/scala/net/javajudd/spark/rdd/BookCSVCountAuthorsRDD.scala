@@ -5,7 +5,7 @@ import org.apache.spark.sql.SparkSession
 object BookCSVCountAuthorsRDD {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
-      .appName("Book CSV Count Authors")
+      .appName("Book CSV Count Authors RDD")
       .getOrCreate()
 
     val csvRdd = spark.sparkContext.textFile(args(0))

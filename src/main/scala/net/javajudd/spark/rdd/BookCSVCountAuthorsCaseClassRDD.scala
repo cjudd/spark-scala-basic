@@ -7,7 +7,7 @@ case class Book(id: Int, author: String, title: String, releaseDate: String, lin
 object BookCSVCountAuthorsCaseClassRDD {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
-      .appName("Book CSV Count Authors")
+      .appName("Book CSV Count Authors Case Class RDD")
       .getOrCreate()
 
     val csvRdd = spark.sparkContext.textFile(args(0))
