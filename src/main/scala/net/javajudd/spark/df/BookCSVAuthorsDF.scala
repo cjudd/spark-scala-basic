@@ -9,16 +9,44 @@ object BookCSVAuthorsDF {
       .getOrCreate()
 
     val input = args(0)
+    val output = args(1)
 
-    val books = spark.read
-      //.format("csv")
+    val booksDF = spark.read
+      //.format("csv").load(input)
       .options(Map(
         "header"->"true",
         "inferSchema"->"true",
-        "delimiter" -> ";"))
+        "delimiter"->";",
+        "quote"->"*"))
       .csv(input)
 
-    books.printSchema()
-    books.show()
+    booksDF.printSchema()
+    booksDF.show()
+
+    booksDF
+      .select("author", "title")
+      .orderBy("author")
+      .show(10)
+
+    import spark.implicits._
+    booksDF
+      .groupBy("author")
+      .count()
+      .orderBy("author")
+      .filter($"count" > 2)
+      .show(10)
+
+    booksDF.createOrReplaceTempView("books")
+    spark
+      .sql("SELECT author, count(id) FROM books group by author order by author")
+      .show(10)
+
+    booksDF.createOrReplaceTempView("books")
+    spark
+      .sql("SELECT author, count(id) FROM books group by author order by author")
+      .repartition(1)
+      .write
+        .option("header",true)
+        .csv(output)
   }
 }
