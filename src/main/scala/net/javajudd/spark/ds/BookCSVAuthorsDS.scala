@@ -1,49 +1,53 @@
-package net.javajudd.spark.df
+package net.javajudd.spark.ds
 
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.SparkSession
 
-object BookCSVAuthorsDF {
+case class Book(id: Int, author: String, title: String, releaseDate: String, link: String)
+
+object BookCSVAuthorsDS {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
-      .appName("Book CSV Count Authors DataFrames")
+      .appName("Book CSV Count Authors Dataset")
+      .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
       .getOrCreate()
 
     val input = args(0)
     val output = args(1)
 
-    val booksDF = spark.read
-      //.format("csv").load(input)
+    import spark.implicits._
+    val booksDS = spark.read
       .options(Map(
         "header"->"true",
         "inferSchema"->"true",
         "delimiter"->";",
         "quote"->"*"))
       .csv(input)
+      .as[Book]
 
-    //val books: Array[Row] = booksDF.collect()
+    //val books: Array[Book] = booksDS.collect()
 
-    booksDF.printSchema()
-    booksDF.show()
+    booksDS.printSchema()
+    booksDS.show()
 
-    booksDF
+    booksDS
       .select("author", "title")
       .orderBy("author")
       .show(10)
 
     import spark.implicits._
-    booksDF
+    booksDS
       .groupBy("author")
       .count()
       .orderBy("author")
       .filter($"count" > 2)
       .show(10)
 
-    booksDF.createOrReplaceTempView("books")
+    booksDS.createOrReplaceTempView("books")
     spark
       .sql("SELECT author, count(id) FROM books group by author order by author")
       .show(10)
 
-    booksDF.createOrReplaceTempView("books")
+    booksDS.createOrReplaceTempView("books")
     spark
       .sql("SELECT author, count(id) FROM books group by author order by author")
       .repartition(1)
