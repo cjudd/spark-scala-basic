@@ -4,10 +4,10 @@ import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 // nc -lk 9999
-object WordCountStream {
+object WordCountRDDStream {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()
-      .setAppName("WorkCountStream")
+      .setAppName("WorkCountRDDStream")
 
     val ssc = new StreamingContext(conf, Seconds(1))
     ssc.socketTextStream("localhost", 9999)
