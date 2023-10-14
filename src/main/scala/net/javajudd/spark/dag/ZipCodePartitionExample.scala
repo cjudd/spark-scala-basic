@@ -10,10 +10,6 @@ object ZipCodePartitionExample {
       .appName("ZipCodePartitionExample")
       .getOrCreate()
 
-    val randomData = Seq.fill(1000)(Random.nextInt)
-    val randomRdd = spark.sparkContext.parallelize(randomData)
-    println(s"Default number of partitions: ${randomRdd.getNumPartitions}") // 16
-
     val zipsDF = spark.read
       .options(Map(
         "header" -> "true",
