@@ -23,6 +23,11 @@ object DAGExample {
     val sum = joined.selectExpr("sum(id)")
     println(s"sum partition size: ${sum.rdd.partitions.size}") // 1
     sum.show()
+
     sum.explain()
+
+    import org.apache.spark.sql.functions.spark_partition_id
+    val joinedWithPartitionId = joined.withColumn("partition_id",spark_partition_id())
+    joinedWithPartitionId.write.csv("/tmp/dag/joined")
   }
 }
